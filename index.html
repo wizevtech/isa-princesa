@@ -16,7 +16,7 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         .bg-ornaments {
             position: fixed;
             top: 0;
@@ -26,7 +26,7 @@
             pointer-events: none;
             z-index: 0;
         }
-        
+
         .container {
             max-width: 700px;
             margin: 32px auto;
@@ -37,7 +37,7 @@
             position: relative;
             z-index: 2;
         }
-        
+
         h1 {
             font-family: 'Great Vibes', cursive;
             color: #e91e63;
@@ -46,7 +46,7 @@
             margin-bottom: 8px;
             text-shadow: 0 2px 8px #ffd70099;
         }
-        
+
         .princess-img {
             display: block;
             margin: 0 auto 16px auto;
@@ -59,18 +59,18 @@
             transition: box-shadow 0.5s, transform 0.25s;
             overflow: visible;
         }
-        
+
         .customize {
             text-align: center;
             margin-bottom: 18px;
         }
-        
+
         .customize label {
             font-weight: bold;
             color: #e91e63;
             margin-right: 8px;
         }
-        
+
         .customize input,
         .customize select {
             padding: 8px 12px;
@@ -79,7 +79,7 @@
             margin: 0 4px 8px 0;
             font-size: 1em;
         }
-        
+
         .customize .accessory {
             margin: 0 6px;
             cursor: pointer;
@@ -94,11 +94,11 @@
             justify-content: center;
             font-size: 1.2em;
         }
-        
+
         .customize .accessory.selected {
             box-shadow: 0 0 12px #e91e63, 0 0 0 4px #ffd700;
         }
-        
+
         .progress-bar {
             width: 100%;
             height: 18px;
@@ -108,7 +108,7 @@
             box-shadow: 0 2px 8px #ffd70044;
             overflow: hidden;
         }
-        
+
         .progress {
             height: 100%;
             background: linear-gradient(90deg, #e91e63 0%, #ffd700 100%);
@@ -116,24 +116,24 @@
             transition: width 0.5s;
             width: 0%;
         }
-        
+
         .quiz {
             margin-top: 16px;
         }
-        
+
         .question {
             font-size: 1.2em;
             color: #e91e63;
             margin-bottom: 12px;
             font-weight: bold;
         }
-        
+
         .options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
-        
+
         .option-btn {
             padding: 10px 12px;
             border-radius: 12px;
@@ -143,14 +143,14 @@
             font-weight: bold;
             transition: transform 0.12s, box-shadow 0.12s;
         }
-        
+
         .option-btn:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
-        
+
         .btn {
-            display: inline-block;
+            display:inline-block;
             background: linear-gradient(90deg, #ffd700 0%, #e91e63 100%);
             color: #fff;
             border: none;
@@ -163,11 +163,11 @@
             margin-top: 12px;
             transition: background 0.3s;
         }
-        
+
         .btn:hover {
             background: linear-gradient(90deg, #e91e63 0%, #ffd700 100%);
         }
-        
+
         .castle-effects {
             min-height: 40px;
             margin: 18px 0;
@@ -178,8 +178,8 @@
             transition: opacity 0.5s;
             opacity: 0;
         }
+
         /* O .magic-book está inicialmente oculto pelo CSS */
-        
         .magic-book {
             display: none;
             margin: 32px auto 0 auto;
@@ -191,18 +191,19 @@
             position: relative;
             animation: bookOpen 1.2s cubic-bezier(.7, 0, .3, 1);
         }
-        
+
         @keyframes bookOpen {
             0% {
                 transform: scaleX(0.2) rotateY(60deg);
                 opacity: 0;
             }
+
             100% {
                 transform: scaleX(1) rotateY(0deg);
                 opacity: 1;
             }
         }
-        
+
         .magic-book .story {
             font-family: 'Great Vibes', cursive;
             color: #e91e63;
@@ -210,7 +211,7 @@
             text-align: center;
             margin-bottom: 18px;
         }
-        
+
         .magic-book .princess-final-img {
             display: block;
             margin: 0 auto;
@@ -220,7 +221,7 @@
             box-shadow: 0 2px 12px #e91e6399, 0 0 0 6px #ffd70044;
             background: #fff url('https://i.imgur.com/1Q9Z1Zy.png') center/cover no-repeat;
         }
-        
+
         .audio-controls {
             position: fixed;
             bottom: 24px;
@@ -233,7 +234,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         .audio-controls button {
             background: none;
             border: none;
@@ -242,19 +243,11 @@
             margin-right: 8px;
             cursor: pointer;
         }
-        
+
         @media (max-width: 520px) {
-            .options {
-                grid-template-columns: 1fr;
-            }
-            .container {
-                margin: 12px;
-                padding: 16px;
-            }
-            .princess-img {
-                width: 140px;
-                height: 170px;
-            }
+            .options { grid-template-columns: 1fr; }
+            .container { margin: 12px; padding: 16px; }
+            .princess-img { width: 140px; height: 170px; }
         }
     </style>
 </head>
@@ -315,52 +308,23 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         // --- Perguntas com respostas prontas (opções) ---
-        const questions = [{
-            q: "Qual é o seu nome de princesa?",
-            choices: ["Aurora", "Isabela", "Valentina", "Luna"]
-        }, {
-            q: "Em qual reino mágico você vive?",
-            choices: ["Reino Rubília", "Vale das Estrelas", "Ilha das Nuvens", "Bosque Dourado"]
-        }, {
-            q: "Como é o castelo onde você mora?",
-            choices: ["Grandioso de mármore", "Pequeno e acolhedor", "Flutuante nas nuvens", "Escondido entre árvores"]
-        }, {
-            q: "Qual é o seu passatempo favorito no palácio?",
-            choices: ["Dançar no salão", "Cuidar do jardim", "Ler livros antigos", "Treinar com a espada"]
-        }, {
-            q: "Qual criatura mágica é sua melhor amiga?",
-            choices: ["Fada sábia", "Dragãozinho brincalhão", "Unicórnio sereno", "Gatinho encantado"]
-        }, {
-            q: "Qual joia representa o seu poder especial?",
-            choices: ["Coração de rubi", "Pingente de safira", "Cetro de ouro", "Amuleto de pérola"]
-        }, {
-            q: "Qual flor é o símbolo do seu reino?",
-            choices: ["Rosa dourada", "Lírio lunar", "Tulipa rosa", "Flor do amanhecer"]
-        }, {
-            q: "Qual é o animal real que você monta para passear?",
-            choices: ["Unicórnio prateado", "Cavalo alado", "Cervo dourado", "Falcão mágico"]
-        }, {
-            q: "Qual música toca quando você entra no salão real?",
-            choices: ["Vals suave", "Marcha alegre", "Melodia misteriosa", "Canção da primavera"]
-        }, {
-            q: "O que você vê quando olha no espelho mágico?",
-            choices: ["Coragem renovada", "Seu futuro sorriso", "Uma aventura à frente", "A verdade do coração"]
-        }, {
-            q: "Um perigo ameaça o reino — o que é?",
-            choices: ["Tempestade sombria", "Feitiço esquecido", "Dragão zangado", "Invasão de sombras"]
-        }, {
-            q: "Quem te ajuda a enfrentar esse desafio?",
-            choices: ["Os guardiões do reino", "Sua amiga fada", "Um sábio ancião", "Seu curinga leal"]
-        }, {
-            q: "Qual é o nome do príncipe (ou princesa) que te apoia?",
-            choices: ["Eduardo", "Mateo", "Helena", "Sofia"]
-        }, {
-            q: "O que você aprende com essa aventura?",
-            choices: ["Valor da amizade", "Força da coragem", "Poder do perdão", "Importância da verdade"]
-        }, {
-            q: "E como termina a sua história de princesa?",
-            choices: ["Com festa e paz", "Com nova missão", "Com um sacrifício nobre", "Com um final feliz eterno"]
-        }];
+        const questions = [
+            { q: "Qual é o seu nome de princesa?", choices: ["Aurora", "Isabela", "Valentina", "Luna"] },
+            { q: "Em qual reino mágico você vive?", choices: ["Reino Rubília", "Vale das Estrelas", "Ilha das Nuvens", "Bosque Dourado"] },
+            { q: "Como é o castelo onde você mora?", choices: ["Grandioso de mármore", "Pequeno e acolhedor", "Flutuante nas nuvens", "Escondido entre árvores"] },
+            { q: "Qual é o seu passatempo favorito no palácio?", choices: ["Dançar no salão", "Cuidar do jardim", "Ler livros antigos", "Treinar com a espada"] },
+            { q: "Qual criatura mágica é sua melhor amiga?", choices: ["Fada sábia", "Dragãozinho brincalhão", "Unicórnio sereno", "Gatinho encantado"] },
+            { q: "Qual joia representa o seu poder especial?", choices: ["Coração de rubi", "Pingente de safira", "Cetro de ouro", "Amuleto de pérola"] },
+            { q: "Qual flor é o símbolo do seu reino?", choices: ["Rosa dourada", "Lírio lunar", "Tulipa rosa", "Flor do amanhecer"] },
+            { q: "Qual é o animal real que você monta para passear?", choices: ["Unicórnio prateado", "Cavalo alado", "Cervo dourado", "Falcão mágico"] },
+            { q: "Qual música toca quando você entra no salão real?", choices: ["Vals suave", "Marcha alegre", "Melodia misteriosa", "Canção da primavera"] },
+            { q: "O que você vê quando olha no espelho mágico?", choices: ["Coragem renovada", "Seu futuro sorriso", "Uma aventura à frente", "A verdade do coração"] },
+            { q: "Um perigo ameaça o reino — o que é?", choices: ["Tempestade sombria", "Feitiço esquecido", "Dragão zangado", "Invasão de sombras"] },
+            { q: "Quem te ajuda a enfrentar esse desafio?", choices: ["Os guardiões do reino", "Sua amiga fada", "Um sábio ancião", "Seu curinga leal"] },
+            { q: "Qual é o nome do príncipe (ou princesa) que te apoia?", choices: ["Eduardo", "Mateo", "Helena", "Sofia"] },
+            { q: "O que você aprende com essa aventura?", choices: ["Valor da amizade", "Força da coragem", "Poder do perdão", "Importância da verdade"] },
+            { q: "E como termina a sua história de princesa?", choices: ["Com festa e paz", "Com nova missão", "Com um sacrifício nobre", "Com um final feliz eterno"] }
+        ];
 
         let answers = new Array(questions.length).fill(null);
         let quizIndex = 0;
@@ -374,7 +338,7 @@
         };
 
         document.querySelectorAll('.accessory').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 btn.classList.toggle('selected');
                 const acc = btn.getAttribute('data-accessory');
                 if (btn.classList.contains('selected')) {
@@ -414,7 +378,7 @@
         }
         updatePrincessImg(false);
 
-        document.getElementById('startBtn').addEventListener('click', function() {
+        document.getElementById('startBtn').addEventListener('click', function () {
             const nomeCampo = document.getElementById('princessName').value.trim();
             if (!nomeCampo) {
                 document.getElementById('princessName').value = questions[0].choices[0];
@@ -430,7 +394,7 @@
             showQuestion();
         });
 
-        document.getElementById('playPauseBtn').addEventListener('click', function() {
+        document.getElementById('playPauseBtn').addEventListener('click', function () {
             let audio = document.getElementById('bgMusic');
             if (audio.paused) {
                 audio.play().catch(() => {});
@@ -472,7 +436,7 @@
                     let btn = document.createElement('button');
                     btn.className = 'option-btn';
                     btn.textContent = choice;
-                    btn.onclick = function() {
+                    btn.onclick = function () {
                         answers[quizIndex] = idx;
                         animateAnswer();
                         quizIndex++;
@@ -489,7 +453,7 @@
                 skipBtn.className = 'btn';
                 skipBtn.style.marginLeft = '8px';
                 skipBtn.textContent = 'Pular (usar padrão)';
-                skipBtn.onclick = function() {
+                skipBtn.onclick = function () {
                     quizIndex++;
                     updateProgress();
                     showCastleEffect();
@@ -507,12 +471,10 @@
                 canvasConfetti({
                     particleCount: 28,
                     spread: 60,
-                    origin: {
-                        y: 0.6
-                    },
+                    origin: { y: 0.6 },
                     colors: ['#ffd700', '#e91e63', '#fff']
                 });
-            } catch (e) {}
+            } catch (e) { }
             const img = document.getElementById('princessImg');
             img.style.boxShadow = '0 0 32px #ffd70099, 0 0 0 12px #e91e6344';
             setTimeout(() => updatePrincessImg(true), 300);
@@ -544,9 +506,7 @@
             let el = document.getElementById('castleEffects');
             el.textContent = effects[Math.max(0, quizIndex - 1)] || '';
             el.style.opacity = 1;
-            setTimeout(() => {
-                el.style.opacity = 0.5;
-            }, 700);
+            setTimeout(() => { el.style.opacity = 0.5; }, 700);
         }
 
         function buildAndShowStory() {
@@ -556,7 +516,7 @@
             /* CORREÇÃO PRINCIPAL: forçar display block para sobrescrever a regra CSS 'display: none' */
             document.getElementById('magicBook').style.display = 'block';
 
-            let nome = document.getElementById('princessName').value.trim() || questions[0].choices[answers[0] ? ? 0];
+            let nome = document.getElementById('princessName').value.trim() || questions[0].choices[answers[0] ?? 0];
 
             function pick(qIndex) {
                 let idx = answers[qIndex];
@@ -605,13 +565,11 @@
                     canvasConfetti({
                         particleCount: 60,
                         spread: 80,
-                        origin: {
-                            y: 0.7
-                        },
+                        origin: { y: 0.7 },
                         colors: ['#ffd700', '#e91e63', '#fff']
                     });
                 }, 650);
-            } catch (e) {}
+            } catch (e) { }
 
             playMusic('feliz');
         }
@@ -660,7 +618,7 @@
         drawParticles();
 
         // Enter avança (clica na primeira opção)
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 const quizEl = document.getElementById('quiz');
                 if (quizEl && quizEl.style.display !== 'none') {
