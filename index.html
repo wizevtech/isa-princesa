@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jogo da Princesa Mágica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #ffd6e0 0%, #ffe7b3 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .bg-ornaments {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 32px auto;
+            background: rgba(255, 255, 255, 0.93);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(218, 165, 32, 0.15);
+            padding: 28px 24px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            color: #e91e63;
+            font-size: 2.8em;
+            text-align: center;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 8px #ffd70099;
+        }
+        
+        .princess-img {
+            display: block;
+            margin: 0 auto 16px auto;
+            width: 180px;
+            height: 220px;
+            border-radius: 50% 50% 60% 60%/60% 60% 50% 50%;
+            box-shadow: 0 4px 24px #e91e6399, 0 0 0 8px #ffd70044;
+            background: url('https://i.imgur.com/1Q9Z1Zy.png') center/cover no-repeat;
+            position: relative;
+            transition: box-shadow 0.5s, transform 0.25s;
+            overflow: visible;
+        }
+        
+        .customize {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        
+        .customize label {
+            font-weight: bold;
+            color: #e91e63;
+            margin-right: 8px;
+        }
+        
+        .customize input,
+        .customize select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ffd700;
+            margin: 0 4px 8px 0;
+            font-size: 1em;
+        }
+        
+        .customize .accessory {
+            margin: 0 6px;
+            cursor: pointer;
+            border: 2px solid #ffd700;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            background: #fff;
+            transition: box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        
+        .customize .accessory.selected {
+            box-shadow: 0 0 12px #e91e63, 0 0 0 4px #ffd700;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 18px;
+            background: #ffe7b3;
+            border-radius: 12px;
+            margin: 18px 0 24px 0;
+            box-shadow: 0 2px 8px #ffd70044;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #e91e63 0%, #ffd700 100%);
+            border-radius: 12px;
+            transition: width 0.5s;
+            width: 0%;
+        }
+        
+        .quiz {
+            margin-top: 16px;
+        }
+        
+        .question {
+            font-size: 1.2em;
+            color: #e91e63;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .option-btn {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 2px solid #ffd700;
+            background: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.12s, box-shadow 0.12s;
+        }
+        
+        .option-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #ffd700 0%, #e91e63 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 22px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #ffd70044;
+            margin-top: 12px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(90deg, #e91e63 0%, #ffd700 100%);
+        }
+        
+        .castle-effects {
+            min-height: 40px;
+            margin: 18px 0;
+            text-align: center;
+            font-size: 1.05em;
+            font-style: italic;
+            color: #e91e63;
+            transition: opacity 0.5s;
+            opacity: 0;
+        }
+        /* O .magic-book está inicialmente oculto pelo CSS */
+        
+        .magic-book {
+            display: none;
+            margin: 32px auto 0 auto;
+            max-width: 560px;
+            background: #fff8e1;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #ffd70099;
+            padding: 24px;
+            position: relative;
+            animation: bookOpen 1.2s cubic-bezier(.7, 0, .3, 1);
+            font-family: 'Playfair Display', 'Great Vibes', serif;
+            font-size: 1.35em;
+            /* ajuste o tamanho aqui se quiser maior/menor */
+            line-height: 1.45;
+            color: #e91e63;
+            text-align: center;
+        }
+        
+        @keyframes bookOpen {
+            0% {
+                transform: scaleX(0.2) rotateY(60deg);
+                opacity: 0;
+            }
+            100% {
+                transform: scaleX(1) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+        
+        .magic-book .story {
+            font-family: 'Great Vibes', cursive;
+            color: #e91e63;
+            font-size: 1.25em;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        
+        .magic-book .princess-final-img {
+            display: block;
+            margin: 0 auto;
+            width: 160px;
+            height: 180px;
+            border-radius: 50%;
+            box-shadow: 0 2px 12px #e91e6399, 0 0 0 6px #ffd70044;
+            background: #fff url('https://i.imgur.com/1Q9Z1Zy.png') center/cover no-repeat;
+        }
+        
+        .audio-controls {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10;
+            background: #fff8e1cc;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #ffd70044;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .audio-controls button {
+            background: none;
+            border: none;
+            color: #e91e63;
+            font-size: 1.2em;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 520px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                margin: 12px;
+                padding: 16px;
+            }
+            .princess-img {
+                width: 140px;
+                height: 170px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cores do site: Dourado e rosa -->
+    <!-- Vamos fazer um jogo de princesa! -->
+    <!-- Imagem de uma princesa, a abaixo quero um quiz de perguntas de vida de princesa -->
+    <!-- Vão ser 15 perguntas -->
+    <!-- Teremos um lugar para colocar o nome da princesa, quero que essa pagina seja bonita e bem estilizada e das cores que eu pedi -->
+
+    <canvas class="bg-ornaments"></canvas>
+    <div class="container">
+        <h1>Jogo da Princesa Mágica</h1>
+        <div class="princess-img" id="princessImg" aria-hidden="true"></div>
+
+        <div class="customize" id="customize">
+            <label for="princessName">Nome da Princesa:</label>
+            <input type="text" id="princessName" maxlength="20" placeholder="Digite seu nome..." />
+
+            <label for="princessDress">Vestido:</label>
+            <select id="princessDress">
+                <option value="rosa">Rosa</option>
+                <option value="dourado">Dourado</option>
+                <option value="azul">Azul</option>
+                <option value="verde">Verde</option>
+            </select>
+
+            <label>Acessórios:</label>
+            <button class="accessory" data-accessory="coroa" title="Coroa 👑">👑</button>
+            <button class="accessory" data-accessory="colar" title="Colar 💎">💎</button>
+            <button class="accessory" data-accessory="varinha" title="Varinha ✨">✨</button>
+            <button class="accessory" data-accessory="flor" title="Flor 🌸">🌸</button>
+            <br />
+            <button class="btn" id="startBtn">Começar aventura!</button>
+        </div>
+
+        <div class="progress-bar" id="progressBar" style="display:none;">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="castle-effects" id="castleEffects" aria-live="polite"></div>
+
+        <div class="quiz" id="quiz" style="display:none;"></div>
+
+        <div class="magic-book" id="magicBook">
+            <div class="story" id="story"></div>
+            <div class="princess-final-img" id="princessFinalImg" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <div class="audio-controls" id="audioControls" style="display:none;">
+        <button id="playPauseBtn">▶️</button>
+        <span id="musicLabel">Música: Mágica</span>
+    </div>
+    <audio id="bgMusic" loop></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        // --- Perguntas com respostas prontas (opções) ---
+        const questions = [{
+            q: "Qual é o seu nome de princesa?",
+            choices: ["Aurora", "Isabela", "Valentina", "Luna"]
+        }, {
+            q: "Em qual reino mágico você vive?",
+            choices: ["Reino Rubília", "Vale das Estrelas", "Ilha das Nuvens", "Bosque Dourado"]
+        }, {
+            q: "Como é o castelo onde você mora?",
+            choices: ["Grandioso de mármore", "Pequeno e acolhedor", "Flutuante nas nuvens", "Escondido entre árvores"]
+        }, {
+            q: "Qual é o seu passatempo favorito no palácio?",
+            choices: ["Dançar no salão", "Cuidar do jardim", "Ler livros antigos", "Treinar com a espada"]
+        }, {
+            q: "Qual criatura mágica é sua melhor amiga?",
+            choices: ["Fada sábia", "Dragãozinho brincalhão", "Unicórnio sereno", "Gatinho encantado"]
+        }, {
+            q: "Qual joia representa o seu poder especial?",
+            choices: ["Coração de rubi", "Pingente de safira", "Cetro de ouro", "Amuleto de pérola"]
+        }, {
+            q: "Qual flor é o símbolo do seu reino?",
+            choices: ["Rosa dourada", "Lírio lunar", "Tulipa rosa", "Flor do amanhecer"]
+        }, {
+            q: "Qual é o animal real que você monta para passear?",
+            choices: ["Unicórnio prateado", "Cavalo alado", "Cervo dourado", "Falcão mágico"]
+        }, {
+            q: "Qual música toca quando você entra no salão real?",
+            choices: ["Vals suave", "Marcha alegre", "Melodia misteriosa", "Canção da primavera"]
+        }, {
+            q: "O que você vê quando olha no espelho mágico?",
+            choices: ["Coragem renovada", "Seu futuro sorriso", "Uma aventura à frente", "A verdade do coração"]
+        }, {
+            q: "Um perigo ameaça o reino — o que é?",
+            choices: ["Tempestade sombria", "Feitiço esquecido", "Dragão zangado", "Invasão de sombras"]
+        }, {
+            q: "Quem te ajuda a enfrentar esse desafio?",
+            choices: ["Os guardiões do reino", "Sua amiga fada", "Um sábio ancião", "Seu curinga leal"]
+        }, {
+            q: "Qual é o nome do príncipe (ou princesa) que te apoia?",
+            choices: ["Eduardo", "Mateo", "Helena", "Sofia"]
+        }, {
+            q: "O que você aprende com essa aventura?",
+            choices: ["Valor da amizade", "Força da coragem", "Poder do perdão", "Importância da verdade"]
+        }, {
+            q: "E como termina a sua história de princesa?",
+            choices: ["Com festa e paz", "Com nova missão", "Com um sacrifício nobre", "Com um final feliz eterno"]
+        }];
+
+        let answers = new Array(questions.length).fill(null);
+        let quizIndex = 0;
+        let accessories = [];
+
+        const musicTracks = {
+            magica: 'https://cdn.pixabay.com/audio/2022/10/16/audio_12b6b7b2e7.mp3',
+            aventura: 'https://cdn.pixabay.com/audio/2023/12/28/audio_8b598dd6e2.mp3',
+            suspense: 'https://cdn.pixabay.com/audio/2024/01/16/audio_03d97f48b9.mp3',
+            feliz: 'https://cdn.pixabay.com/audio/2023/07/28/audio_6a5462193b.mp3'
+        };
+
+        document.querySelectorAll('.accessory').forEach(btn => {
+            btn.addEventListener('click', function() {
+                btn.classList.toggle('selected');
+                const acc = btn.getAttribute('data-accessory');
+                if (btn.classList.contains('selected')) {
+                    if (!accessories.includes(acc)) accessories.push(acc);
+                } else {
+                    accessories = accessories.filter(a => a !== acc);
+                }
+                updatePrincessImg(true);
+            });
+        });
+        document.getElementById('princessDress').addEventListener('change', () => updatePrincessImg(true));
+
+        function updatePrincessImg(anim) {
+            const img = document.getElementById('princessImg');
+            let dress = document.getElementById('princessDress').value;
+            if (dress === 'dourado') img.style.boxShadow = '0 4px 24px #ffd70099, 0 0 0 8px #e91e6344';
+            else if (dress === 'rosa') img.style.boxShadow = '0 4px 24px #e91e6399, 0 0 0 8px #ffd70044';
+            else if (dress === 'azul') img.style.boxShadow = '0 4px 24px #2196f399, 0 0 0 8px #ffd70044';
+            else img.style.boxShadow = '0 4px 24px #4caf5099, 0 0 0 8px #ffd70044';
+
+            img.innerHTML = '';
+            accessories.forEach(a => {
+                let el = document.createElement('span');
+                el.style.position = 'absolute';
+                el.style.fontSize = '2em';
+                el.style.pointerEvents = 'none';
+                el.style.top = a === 'coroa' ? '-18px' : a === 'colar' ? (img.clientHeight - 60) + 'px' : a === 'varinha' ? (img.clientHeight - 100) + 'px' : '40px';
+                el.style.left = a === 'coroa' ? (img.clientWidth / 2 - 18) + 'px' : a === 'colar' ? (img.clientWidth / 2 - 18) + 'px' : a === 'varinha' ? (img.clientWidth - 50) + 'px' : '20px';
+                el.textContent = a === 'coroa' ? '👑' : a === 'colar' ? '💎' : a === 'varinha' ? '✨' : '🌸';
+                img.appendChild(el);
+            });
+
+            if (anim) {
+                img.style.transform = 'scale(1.06)';
+                setTimeout(() => img.style.transform = '', 350);
+            }
+        }
+        updatePrincessImg(false);
+
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const nomeCampo = document.getElementById('princessName').value.trim();
+            if (!nomeCampo) {
+                document.getElementById('princessName').value = questions[0].choices[0];
+            }
+            answers = new Array(questions.length).fill(null);
+            quizIndex = 0;
+            document.getElementById('customize').style.display = 'none';
+            document.getElementById('progressBar').style.display = '';
+            document.getElementById('quiz').style.display = '';
+            document.getElementById('audioControls').style.display = '';
+            document.getElementById('progress').style.width = '0%';
+            playMusic('magica');
+            showQuestion();
+        });
+
+        document.getElementById('playPauseBtn').addEventListener('click', function() {
+            let audio = document.getElementById('bgMusic');
+            if (audio.paused) {
+                audio.play().catch(() => {});
+                this.textContent = '⏸️';
+            } else {
+                audio.pause();
+                this.textContent = '▶️';
+            }
+        });
+
+        function playMusic(type) {
+            let audio = document.getElementById('bgMusic');
+            let src = musicTracks[type] || musicTracks.magica;
+            if (audio.src !== src) audio.src = src;
+            audio.play().catch(() => {
+                document.getElementById('playPauseBtn').textContent = '▶️';
+            });
+            document.getElementById('musicLabel').textContent = 'Música: ' + (type.charAt(0).toUpperCase() + type.slice(1));
+            setTimeout(() => {
+                if (!audio.paused) document.getElementById('playPauseBtn').textContent = '⏸️';
+            }, 200);
+        }
+
+        function showQuestion() {
+            const quiz = document.getElementById('quiz');
+            quiz.innerHTML = '';
+
+            if (quizIndex < questions.length) {
+                const current = questions[quizIndex];
+                let q = document.createElement('div');
+                q.className = 'question';
+                q.textContent = (quizIndex + 1) + ' - ' + current.q;
+                quiz.appendChild(q);
+
+                let optionsWrap = document.createElement('div');
+                optionsWrap.className = 'options';
+
+                current.choices.forEach((choice, idx) => {
+                    let btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.textContent = choice;
+                    btn.onclick = function() {
+                        answers[quizIndex] = idx;
+                        animateAnswer();
+                        quizIndex++;
+                        updateProgress();
+                        showCastleEffect();
+                        setTimeout(showQuestion, 500);
+                    };
+                    optionsWrap.appendChild(btn);
+                });
+
+                quiz.appendChild(optionsWrap);
+
+                let skipBtn = document.createElement('button');
+                skipBtn.className = 'btn';
+                skipBtn.style.marginLeft = '8px';
+                skipBtn.textContent = 'Pular (usar padrão)';
+                skipBtn.onclick = function() {
+                    quizIndex++;
+                    updateProgress();
+                    showCastleEffect();
+                    setTimeout(showQuestion, 300);
+                };
+                quiz.appendChild(skipBtn);
+
+            } else {
+                buildAndShowStory();
+            }
+        }
+
+        function animateAnswer() {
+            try {
+                canvasConfetti({
+                    particleCount: 28,
+                    spread: 60,
+                    origin: {
+                        y: 0.6
+                    },
+                    colors: ['#ffd700', '#e91e63', '#fff']
+                });
+            } catch (e) {}
+            const img = document.getElementById('princessImg');
+            img.style.boxShadow = '0 0 32px #ffd70099, 0 0 0 12px #e91e6344';
+            setTimeout(() => updatePrincessImg(true), 300);
+        }
+
+        function updateProgress() {
+            let pct = Math.round((quizIndex / questions.length) * 100);
+            document.getElementById('progress').style.width = pct + '%';
+        }
+
+        function showCastleEffect() {
+            const effects = [
+                'Portas douradas se abriram no castelo!',
+                'Flores mágicas surgiram nos jardins!',
+                'O salão brilhou com luz rosa!',
+                'Borboletas douradas voaram pelo céu!',
+                'A fonte do castelo jorrou purpurina!',
+                'O espelho mágico reluziu!',
+                'A coroa brilhou intensamente!',
+                'O dragão amigo apareceu!',
+                'O lago ficou dourado!',
+                'O tapete real flutuou!',
+                'O livro mágico se abriu!',
+                'O arco-íris surgiu sobre o castelo!',
+                'A música encantada tocou!',
+                'O jardim floresceu!',
+                'O final feliz iluminou tudo!'
+            ];
+            let el = document.getElementById('castleEffects');
+            el.textContent = effects[Math.max(0, quizIndex - 1)] || '';
+            el.style.opacity = 1;
+            setTimeout(() => {
+                el.style.opacity = 0.5;
+            }, 700);
+        }
+
+        function buildAndShowStory() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('castleEffects').style.display = 'none';
+            /* CORREÇÃO PRINCIPAL: forçar display block para sobrescrever a regra CSS 'display: none' */
+            document.getElementById('magicBook').style.display = 'block';
+
+            let nome = document.getElementById('princessName').value.trim() || questions[0].choices[answers[0] ? ? 0];
+
+            function pick(qIndex) {
+                let idx = answers[qIndex];
+                if (idx === null || idx === undefined) idx = 0;
+                return questions[qIndex].choices[idx];
+            }
+
+            let reino = pick(1);
+            let castelo = pick(2);
+            let passatempo = pick(3);
+            let amiga = pick(4);
+            let joia = pick(5);
+            let flor = pick(6);
+            let animal = pick(7);
+            let musica = pick(8);
+            let espelho = pick(9);
+            let perigo = pick(10);
+            let ajuda = pick(11);
+            let parceiro = pick(12);
+            let aprendizado = pick(13);
+            let finalEnding = pick(14);
+
+            let story =
+                `Era uma vez, no ${reino}, a princesa ${nome} vivia num ${castelo} rodeado por ${flor}s. ` +
+                `Seu passatempo favorito era ${passatempo}, sempre acompanhada da ${amiga}. ` +
+                `Seu poder vinha do ${joia}; montava ${animal} para explorar cada canto do reino. ` +
+                `Ao entrar no salão, a ${musica} preenchia o ar, e o espelho mágico sempre mostrava ${espelho}. ` +
+                `Mas um dia surgiu o perigo: ${perigo}. Com a ajuda de ${ajuda} e o apoio de ${parceiro}, ` +
+                `${nome} enfrentou o desafio e aprendeu sobre ${aprendizado}. ` +
+                `Tudo terminou ${finalEnding.toLowerCase()}, e o reino celebrou com brilhos dourados e rosas.`;
+
+            document.getElementById('story').textContent = story;
+
+            let finalImg = document.getElementById('princessFinalImg');
+            const source = document.getElementById('princessImg');
+            const cs = window.getComputedStyle(source);
+            finalImg.style.backgroundImage = cs.backgroundImage;
+            finalImg.style.backgroundSize = cs.backgroundSize;
+            finalImg.style.backgroundPosition = cs.backgroundPosition;
+            finalImg.innerHTML = source.innerHTML;
+
+            document.getElementById('magicBook').style.animation = 'bookOpen 1.2s cubic-bezier(.7,0,.3,1)';
+
+            try {
+                setTimeout(() => {
+                    canvasConfetti({
+                        particleCount: 60,
+                        spread: 80,
+                        origin: {
+                            y: 0.7
+                        },
+                        colors: ['#ffd700', '#e91e63', '#fff']
+                    });
+                }, 650);
+            } catch (e) {}
+
+            playMusic('feliz');
+        }
+
+        // Partículas de fundo
+        const canvas = document.querySelector('.bg-ornaments');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let particles = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2 + 1,
+                c: Math.random() < 0.5 ? '#ffd700' : '#e91e63',
+                dx: Math.random() * 0.6 - 0.3,
+                dy: Math.random() * 0.5 - 0.15
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+                ctx.fillStyle = p.c;
+                ctx.globalAlpha = 0.5;
+                ctx.fill();
+                p.x += p.dx;
+                p.y += p.dy;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y > canvas.height) p.y = 0;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.y < 0) p.y = canvas.height;
+            });
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+
+        // Enter avança (clica na primeira opção)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const quizEl = document.getElementById('quiz');
+                if (quizEl && quizEl.style.display !== 'none') {
+                    const firstOption = quizEl.querySelector('.option-btn');
+                    if (firstOption) firstOption.click();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
